@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Plan Investasi 15 Bulan</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* --- General & Mobile First Styles --- */
+        :root {
+            --primary-bg: #f4f7f9;
+            --secondary-bg: #ffffff;
+            --text-color: #333;
+            --primary-color: #007bff;
+            --accent-color-1: #dc3545; /* Pengeluaran */
+            --accent-color-2: #28a745; /* Pemasukkan */
+            --accent-color-3: #17a2b8; /* Cash */
+            --border-color: #e0e0e0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 1.8em;
+        }
+        
+        h2 {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 5px;
+        }
+
+        /* --- Navigation Menu --- */
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        nav button {
+            flex-grow: 1;
+            padding: 12px 10px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            border: 1px solid var(--primary-color);
+            background-color: var(--secondary-bg);
+            color: var(--primary-color);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        nav button.active,
+        nav button:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* --- Content Sections --- */
+        .content-section {
+            display: none;
+            background-color: var(--secondary-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Utility & Components --- */
+        .card-container {
+            display: grid;
+            gap: 15px;
+        }
+
+        .card {
+            background: #fafafa;
+            border-left: 5px solid var(--primary-color);
+            padding: 15px;
+            border-radius: 5px;
+        }
+        
+        .card h3 {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .card ul {
+            list-style-position: inside;
+            padding-left: 5px;
+        }
+        
+        .card li {
+            margin-bottom: 5px;
+        }
+
+        .card-opex { border-color: var(--accent-color-1); }
+        .card-invest { border-color: var(--accent-color-2); }
+        
+        .highlight {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        #chart-container {
+            position: relative;
+            height: 300px; /* Mobile height */
+        }
+        
+        /* --- Desktop Styles --- */
+        @media (min-width: 768px) {
+            h1 { font-size: 2.2em; }
+            #chart-container { height: 400px; }
+            .card-container { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Budget Plan Investasi 15 Bulan</h1>
+        </header>
+
+        <nav id="main-menu">
+            <button data-target="ringkasan" class="active">Ringkasan</button>
+            <button data-target="alokasi">Alokasi Dana</button>
+            <button data-target="arus-kas">Arus Kas</button>
+            <button data-target="kesimpulan">Kesimpulan</button>
+        </nav>
+
+        <main>
+            <!-- Section 1: Ringkasan -->
+            <section id="ringkasan" class="content-section active">
+                <h2>Ringkasan Anggaran</h2>
+                <p>Rencana anggaran ini dialokasikan dari total dana sebesar <span class="highlight">Rp 200.000.000</span> untuk periode 15 bulan. Dana dibagi secara merata untuk dua pos utama.</p>
+                <div class="card-container" style="margin-top: 20px;">
+                    <div class="card card-invest">
+                        <h3>Investasi (50%)</h3>
+                        <p>Total: <span class="highlight">Rp 100.000.000</span></p>
+                        <p>Fokus pada aset jangka panjang seperti tanah dan bangunan.</p>
+                    </div>
+                    <div class="card card-opex">
+                        <h3>Opex (50%)</h3>
+                        <p>Total: <span class="highlight">Rp 100.000.000</span></p>
+                        <p>Mencakup biaya operasional, pelunasan hutang, dan hibah.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Alokasi Dana -->
+            <section id="alokasi" class="content-section">
+                <h2>Rincian Alokasi Dana</h2>
+                <div class="card-container">
+                    <div class="card card-invest">
+                        <h3>Detail Investasi</h3>
+                        <ul>
+                            <li><strong>Land (Tanah):</strong> Rp 50.000.000</li>
+                            <li><strong>Dwellings (Bangunan):</strong> Rp 50.000.000</li>
+                        </ul>
+                    </div>
+                    <div class="card card-opex">
+                        <h3>Detail Opex</h3>
+                        <ul>
+                            <li><strong>Operasional (9 bln):</strong> Rp 45.000.000</li>
+                            <li><strong>Transisi (6 bln):</strong> Rp 30.000.000</li>
+                            <li><strong>Pelunasan Hutang:</strong> Rp 20.000.000</li>
+                            <li><strong>Belanja Hibah:</strong> Rp 5.000.000</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Arus Kas -->
+            <section id="arus-kas" class="content-section">
+                <h2>Analisis & Visualisasi Arus Kas</h2>
+                <p>Grafik di bawah ini menunjukkan proyeksi pengeluaran, pemasukan, dan saldo kas dari bulan ke-1 (M1) hingga bulan ke-15 (M15).</p>
+                <div id="chart-container">
+                    <canvas id="cashFlowChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Section 4: Kesimpulan -->
+            <section id="kesimpulan" class="content-section">
+                <h2>Kesimpulan & Poin Kunci</h2>
+                <ul>
+                    <li><strong>Pengeluaran Terbesar:</strong> Terjadi pada <span class="highlight">Bulan ke-6 (Rp 38,3 jt)</span> karena pembayaran investasi dan <span class="highlight">Bulan ke-2 (Rp 26 jt)</span> karena pelunasan hutang.</li>
+                    <li><strong>Pemasukan Pertama:</strong> Pemasukan diproyeksikan mulai stabil pada <span class="highlight">Bulan ke-7</span>, membantu pemulihan kas.</li>
+                    <li><strong>Titik Kritis Kas:</strong> Saldo kas mencapai titik terendah pada <span class="highlight">Bulan ke-9 (Rp 35,5 jt)</span> sebelum mulai naik kembali.</li>
+                    <li><strong>Proyeksi Akhir:</strong> Di akhir periode (Bulan ke-15), saldo kas diperkirakan mencapai <span class="highlight">Rp 55.000.000</span>.</li>
+                </ul>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Logic for Menu and Section Toggling ---
+            const menu = document.getElementById('main-menu');
+            const sections = document.querySelectorAll('.content-section');
+
+            menu.addEventListener('click', function(event) {
+                if (event.target.tagName === 'BUTTON') {
+                    const targetId = event.target.getAttribute('data-target');
+
+                    // Update button active state
+                    menu.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+                    event.target.classList.add('active');
+                    
+                    // Update section active state
+                    sections.forEach(section => {
+                        if (section.id === targetId) {
+                            section.classList.add('active');
+                        } else {
+                            section.classList.remove('active');
+                        }
+                    });
+                }
+            });
+
+            // --- Chart.js Visualization ---
+            const ctx = document.getElementById('cashFlowChart').getContext('2d');
+            
+            const labels = ['M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', 'M11', 'M12', 'M13', 'M14', 'M15'];
+            const pengeluaranData = [8000000, 26000000, 6000000, 17500000, 21666667, 38333333, 25833333, 17500000, 9166667, 5000000, 5000000, 5000000, 5000000, 5000000, 5000000];
+            const pemasukkanData = [0, 0, 0, 0, 0, 0, 1000000, 1500000, 3000000, 4500000, 6000000, 7500000, 9000000, 10500000, 12000000];
+            const cashData = [192000000, 166000000, 160000000, 142500000, 120833333, 82500000, 57666667, 41666667, 35500000, 35000000, 36000000, 38500000, 42500000, 48000000, 55000000];
+
+            const cashFlowChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Pengeluaran',
+                            data: pengeluaranData,
+                            borderColor: 'rgba(220, 53, 69, 0.8)', /* --accent-color-1 */
+                            backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                            yAxisID: 'y',
+                            tension: 0.1,
+                            fill: true,
+                        },
+                        {
+                            label: 'Pemasukkan',
+                            data: pemasukkanData,
+                            borderColor: 'rgba(40, 167, 69, 0.8)', /* --accent-color-2 */
+                            backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                            yAxisID: 'y',
+                            tension: 0.1,
+                            fill: true,
+                        },
+                        {
+                            label: 'Saldo Kas',
+                            data: cashData,
+                            borderColor: 'rgba(23, 162, 184, 1)', /* --accent-color-3 */
+                            backgroundColor: 'rgba(23, 162, 184, 0.1)',
+                            yAxisID: 'y1',
+                            tension: 0.1,
+                            fill: false,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Proyeksi Arus Kas Selama 15 Bulan'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(context.parsed.y);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Bulan ke-'
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Pemasukan / Pengeluaran (Rp)'
+                            },
+                            ticks: {
+                                callback: function(value) { return value / 1000000 + ' Jt'; }
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Saldo Kas (Rp)'
+                            },
+                            grid: {
+                                drawOnChartArea: false, 
+                            },
+                            ticks: {
+                                callback: function(value) { return value / 1000000 + ' Jt'; }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
