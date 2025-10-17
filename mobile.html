@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Budget Plan & Proyeksi 5 Tahun</title>
+    <title>Analisis Skenario Penurunan Proyeksi</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -26,25 +26,16 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .card-container { display: grid; gap: 15px; }
         .card { background: #fafafa; border-left: 5px solid var(--primary-color); padding: 15px; border-radius: 5px; }
-        .card ul { list-style-position: inside; padding-left: 5px; }
-        .card li { margin-bottom: 5px; }
-        .card-opex { border-color: var(--accent-color-1); }
-        .card-invest { border-color: var(--accent-color-2); }
         .highlight { font-weight: bold; color: var(--primary-color); }
-        .info-box { background-color: #e7f3ff; border-left: 5px solid #007bff; padding: 15px; margin-top: 20px; border-radius: 5px; }
+        .warning-box { background-color: #fff3cd; border-left: 5px solid #ffc107; padding: 15px; margin-top: 20px; border-radius: 5px; }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--border-color); }
         th { background-color: #f2f2f2; }
         td:nth-child(n+2) { text-align: right; }
         .chart-container { position: relative; height: 300px; width: 100%; margin-top: 20px; }
-        .projection-controls { display: flex; gap: 15px; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
-        .projection-controls label { font-weight: bold; }
-        .projection-controls select { padding: 8px; border-radius: 5px; border: 1px solid #ccc; font-size: 1em; }
         @media (min-width: 768px) {
             h1 { font-size: 2.2em; }
-            nav button { font-size: 1em; padding: 12px 10px; }
             .chart-container { height: 400px; }
-            .card-container { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
@@ -52,46 +43,32 @@
 
     <div class="container">
         <header>
-            <h1>Budget Plan & Proyeksi 5 Tahun</h1>
+            <h1>Analisis Skenario Penurunan Proyeksi</h1>
         </header>
 
         <nav id="main-menu">
-            <button data-target="ringkasan" class="active">Ringkasan</button>
-            <button data-target="alokasi">Alokasi Dana</button>
-            <button data-target="proyeksi">Proyeksi Arus Kas Tahunan</button>
-            <button data-target="kesimpulan">Kesimpulan</button>
+            <button data-target="ringkasan" class="active">Ringkasan Awal</button>
+            <button data-target="proyeksi">Proyeksi Arus Kas Terbaru</button>
+            <button data-target="kesimpulan">Kesimpulan & Rekomendasi</button>
         </nav>
 
         <main>
             <section id="ringkasan" class="content-section active">
                 <h2>Ringkasan Anggaran Awal</h2>
-                <p>Rencana anggaran ini dialokasikan dari total dana sebesar <span class="highlight">Rp 200.000.000</span>. Dana dibagi secara merata untuk dua pos utama.</p>
+                <p>Analisis ini didasarkan pada investasi awal sebesar <span class="highlight">Rp 200.000.000</span>, yang dialokasikan untuk properti dan biaya operasional awal.</p>
                 <div class="card-container" style="margin-top: 20px;">
-                    <div class="card card-invest"><h3>Investasi (50%)</h3><p>Total: <span class="highlight">Rp 100.000.000</span></p><p>Fokus pada konversi aset kas menjadi aset properti (tanah dan bangunan).</p></div>
-                    <div class="card card-opex"><h3>Opex (50%)</h3><p>Total: <span class="highlight">Rp 100.000.000</span></p><p>Mencakup biaya operasional, pelunasan hutang, dan biaya hangus lainnya.</p></div>
+                    <div class="card"><h3>Investasi Aset</h3><p>Total: <span class="highlight">Rp 100.000.000</span></p></div>
+                    <div class="card"><h3>Biaya Operasional Awal</h3><p>Total: <span class="highlight">Rp 100.000.000</span></p></div>
                 </div>
-            </section>
-
-            <section id="alokasi" class="content-section">
-                <h2>Rincian Alokasi Dana</h2>
-                <div class="card-container">
-                    <div class="card card-invest"><h3>Detail Investasi</h3><ul><li><strong>Land (Tanah):</strong> Rp 50.000.000</li><li><strong>Dwellings (Bangunan):</strong> Rp 50.000.000</li></ul></div>
-                    <div class="card card-opex"><h3>Detail Opex</h3><ul><li><strong>Operasional (9 bln):</strong> Rp 45.000.000</li><li><strong>Transisi (6 bln):</strong> Rp 30.000.000</li><li><strong>Pelunasan Hutang:</strong> Rp 20.000.000</li><li><strong>Belanja Hibah:</strong> Rp 5.000.000</li></ul></div>
-                </div>
-                <div class="info-box"><h3>Membedakan Biaya dan Investasi</h3><p>Alokasi dana untuk <strong>Investasi (Rp 100.000.000)</strong> bukanlah biaya hangus. Dana ini digunakan untuk mengkonversi aset kas menjadi aset properti yang nilainya akan tetap ada dan berpotensi meningkat di masa depan.</p></div>
             </section>
 
             <section id="proyeksi" class="content-section">
-                <h2>Proyeksi Arus Kas Tahunan (5 Tahun)</h2>
-                <p>Grafik ini mengagregasi data bulanan menjadi performa tahunan untuk menampilkan gambaran strategis selama 5 tahun. Tahun pertama menunjukkan kerugian operasional karena investasi besar, namun pulih dengan cepat di tahun kedua dan terus bertumbuh.</p>
-                
-                <div class="projection-controls">
-                    <label for="scenario-select">Pilih Skenario Pertumbuhan:</label>
-                    <select id="scenario-select">
-                        <option value="konservatif" selected>Konservatif (Pemasukan +5%/tahun)</option>
-                        <option value="moderat">Moderat (Pemasukan +10%/tahun)</option>
-                    </select>
-                </div>
+                <h2>Proyeksi Arus Kas Tahunan (Skenario Penurunan)</h2>
+                <p>Grafik dan tabel di bawah ini didasarkan pada asumsi baru yang lebih pesimis:</p>
+                <ul>
+                    <li><strong>Tahun ke-2:</strong> Pemasukan menjadi flat <strong>Rp 3 jt/bulan</strong> dan Opex flat <strong>Rp 2 jt/bulan</strong>.</li>
+                    <li><strong>Tahun ke-3 dst:</strong> Pemasukan tumbuh <strong>8%/tahun</strong>, Opex naik <strong>5%/tahun</strong>.</li>
+                </ul>
 
                 <div class="chart-container">
                     <canvas id="projectionChart"></canvas>
@@ -101,7 +78,7 @@
                 <div class="table-responsive">
                     <table id="projection-table">
                         <thead>
-                            <tr><th>Metrik</th><th>Tahun ke-3</th><th>Tahun ke-4</th><th>Tahun ke-5</th></tr>
+                            <tr><th>Metrik</th><th>Tahun ke-2</th><th>Tahun ke-3</th><th>Tahun ke-4</th><th>Tahun ke-5</th></tr>
                         </thead>
                         <tbody></tbody>
                     </table>
@@ -109,24 +86,16 @@
             </section>
 
             <section id="kesimpulan" class="content-section">
-                <h2>Kesimpulan & Poin Kunci</h2>
-                <ul>
-                    <li><strong>Pembentukan Aset:</strong> Periode awal berhasil mengkonversi <span class="highlight">Rp 100.000.000</span> kas menjadi aset properti yang bernilai jangka panjang.</li>
-                    <li><strong>Pemulihan Cepat:</strong> Meskipun rugi operasional di tahun pertama akibat investasi, bisnis mencapai profitabilitas yang kuat di tahun kedua dan seterusnya.</li>
-                    <li><strong>Potensi Pertumbuhan:</strong> Proyeksi jangka panjang menunjukkan bisnis ini sangat profitabel dan memiliki arus kas yang sehat, bahkan dalam skenario pertumbuhan yang konservatif.</li>
-                </ul>
-                
-                <div style="margin-top: 25px;">
-                    <h3>Posisi Aset di Akhir Periode Awal (Bulan ke-15)</h3>
-                     <table>
-                        <thead><tr><th>Jenis Aset</th><th>Nilai</th></tr></thead>
-                        <tbody>
-                            <tr><td>Aset Lancar (Kas)</td><td>Rp 55.000.000</td></tr>
-                            <tr><td>Aset Tetap (Properti)</td><td>Rp 100.000.000</td></tr>
-                            <tr><td><strong>Total Estimasi Nilai Aset</strong></td><td><strong>Rp 155.000.000</strong></td></tr>
-                        </tbody>
-                    </table>
+                <h2>Kesimpulan & Rekomendasi</h2>
+                <div class="warning-box">
+                    <h3>Peringatan: Investasi Tidak Lagi Menguntungkan</h3>
+                    <p>Berdasarkan skenario baru, proyek ini tidak lagi layak secara finansial. Meskipun bisnis tetap menghasilkan laba operasional kecil, waktu yang dibutuhkan untuk balik modal (lebih dari 15 tahun) terlalu lama.</p>
                 </div>
+                <ul>
+                    <li><strong>ROI Sangat Rendah:</strong> Laba tahunan yang hanya sekitar <span class="highlight">Rp 12 juta - Rp 20 juta</span> tidak sepadan dengan investasi awal Rp 200 juta.</li>
+                    <li><strong>Arus Kas Rentan:</strong> Margin keuntungan yang tipis membuat bisnis sangat berisiko terhadap kenaikan biaya atau penurunan pemasukan tak terduga.</li>
+                    <li><strong>Rekomendasi:</strong> Diperlukan intervensi strategis segera untuk meningkatkan sumber pemasukan secara drastis atau meninjau ulang model bisnis secara keseluruhan. Tanpa perubahan signifikan, investasi ini tidak akan mencapai tujuannya.</li>
+                </ul>
             </section>
         </main>
     </div>
@@ -144,29 +113,22 @@
                 }
             });
 
-            const scenarioSelect = document.getElementById('scenario-select');
             const projectionTableBody = document.querySelector("#projection-table tbody");
             const projectionCtx = document.getElementById('projectionChart').getContext('2d');
             let projectionChart;
-
-            const scenarios = {
-                moderat: { incomeGrowth: 0.10, name: 'Moderat' },
-                konservatif: { incomeGrowth: 0.05, name: 'Konservatif' }
-            };
 
             function formatCurrency(value) {
                 return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value);
             }
 
             function formatAxis(value) {
-                if (value >= 1e9) return (value / 1e9) + ' M';
                 if (value >= 1e6) return (value / 1e6) + ' Jt';
                 if (value <= -1e6) return (value / 1e6) + ' Jt';
                 return value;
             }
 
-            function calculateProjection(scenario) {
-                const { incomeGrowth } = scenarios[scenario];
+            function calculateProjection() {
+                const incomeGrowth = 0.08;
                 const opexGrowth = 0.05;
 
                 const labels = ['Tahun-1', 'Tahun-2', 'Tahun-3', 'Tahun-4', 'Tahun-5'];
@@ -174,32 +136,31 @@
                 const labaData = [];
                 const tableData = { pemasukan: [], opex: [], laba: [], kas: [] };
 
-                const initialPemasukan = [0, 0, 0, 0, 0, 0, 1000000, 1500000, 3000000, 4500000, 6000000, 7500000, 9000000, 10500000, 12000000];
+                const initialPemasukan = [0, 0, 0, 0, 0, 0, 1000000, 1500000, 3000000, 4500000, 6000000, 7500000];
                 const initialPengeluaran = [8000000, 26000000, 6000000, 17500000, 21666667, 38333333, 25833333, 17500000, 9166667, 5000000, 5000000, 5000000];
                 const kasEndM12 = 38500000;
 
                 // --- Tahun 1 ---
-                const pemasukanY1 = initialPemasukan.slice(0, 12).reduce((a, b) => a + b, 0);
+                const pemasukanY1 = initialPemasukan.reduce((a, b) => a + b, 0);
                 const pengeluaranY1 = initialPengeluaran.reduce((a, b) => a + b, 0);
                 const labaY1 = pemasukanY1 - pengeluaranY1;
                 labaData.push(labaY1);
                 kasData.push(kasEndM12);
 
-                // --- Tahun 2 ---
-                let pemasukanY2 = initialPemasukan.slice(12).reduce((a, b) => a + b, 0);
-                let pengeluaranY2 = 15000000; // 3x 5jt
-                let lastPemasukanBulanan = initialPemasukan[14];
-                for (let i = 0; i < 9; i++) {
-                    lastPemasukanBulanan += 1500000;
-                    pemasukanY2 += lastPemasukanBulanan;
-                    pengeluaranY2 += 5000000;
-                }
+                // --- Tahun 2 (New Assumptions) ---
+                const pemasukanY2 = 3000000 * 12;
+                const pengeluaranY2 = 2000000 * 12;
                 const labaY2 = pemasukanY2 - pengeluaranY2;
                 const kasY2 = kasEndM12 + labaY2;
                 labaData.push(labaY2);
                 kasData.push(kasY2);
+                
+                tableData.pemasukan.push(pemasukanY2);
+                tableData.opex.push(pengeluaranY2);
+                tableData.laba.push(labaY2);
+                tableData.kas.push(kasY2);
 
-                // --- Tahun 3, 4, 5 ---
+                // --- Tahun 3, 4, 5 (New Growth) ---
                 let pemasukanTahunan = pemasukanY2;
                 let opexTahunan = pengeluaranY2;
                 let kasTahunan = kasY2;
@@ -210,19 +171,20 @@
                     const labaTahunan = pemasukanTahunan - opexTahunan;
                     kasTahunan += labaTahunan;
 
-                    labaData.push(labaTahunan);
-                    kasData.push(kasTahunan);
-                    tableData.pemasukan.push(pemasukanTahunan);
-                    tableData.opex.push(opexTahunan);
-                    tableData.laba.push(labaTahunan);
-                    tableData.kas.push(kasTahunan);
+                    if (i > 2) { // Push data for Y3, Y4, Y5
+                        labaData.push(labaTahunan);
+                        kasData.push(kasTahunan);
+                        tableData.pemasukan.push(pemasukanTahunan);
+                        tableData.opex.push(opexTahunan);
+                        tableData.laba.push(labaTahunan);
+                        tableData.kas.push(kasTahunan);
+                    }
                 }
-
                 return { labels, kasData, labaData, tableData };
             }
 
-            function updateProjectionUI(scenario) {
-                const { labels, kasData, labaData, tableData } = calculateProjection(scenario);
+            function updateProjectionUI() {
+                const { labels, kasData, labaData, tableData } = calculateProjection();
                 
                 projectionTableBody.innerHTML = `
                     <tr><td>Pemasukan Tahunan</td>${tableData.pemasukan.map(v => `<td>${formatCurrency(v)}</td>`).join('')}</tr>
@@ -235,7 +197,7 @@
                     labels: labels,
                     datasets: [
                         { type: 'bar', label: 'Laba Operasional Tahunan', data: labaData, backgroundColor: 'rgba(40, 167, 69, 0.7)', yAxisID: 'y' },
-                        { type: 'line', label: 'Akumulasi Saldo Kas', data: kasData, borderColor: 'rgba(23, 162, 184, 1)', backgroundColor: 'rgba(23, 162, 184, 0.1)', yAxisID: 'y1', tension: 0.1, fill: false }
+                        { type: 'line', label: 'Akumulasi Saldo Kas', data: kasData, borderColor: 'rgba(23, 162, 184, 1)', yAxisID: 'y1', tension: 0.1 }
                     ]
                 };
 
@@ -248,7 +210,7 @@
                         options: {
                             responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
                             plugins: {
-                                title: { display: true, text: 'Proyeksi Laba dan Akumulasi Kas (5 Tahun)', font: { size: 16 } },
+                                title: { display: true, text: 'Proyeksi Laba dan Akumulasi Kas (Skenario Penurunan)', font: { size: 16 } },
                                 tooltip: { callbacks: { label: context => `${context.dataset.label || ''}: ${formatCurrency(context.parsed.y)}` } }
                             },
                             scales: {
@@ -260,8 +222,7 @@
                     });
                 }
             }
-            scenarioSelect.addEventListener('change', (e) => updateProjectionUI(e.target.value));
-            updateProjectionUI('konservatif');
+            updateProjectionUI();
         });
     </script>
 
