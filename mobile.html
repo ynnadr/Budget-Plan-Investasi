@@ -3,184 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Budget Plan Investasi 15 Bulan</title>
+    <title>Budget Plan Investasi 5 Tahun</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* --- General & Mobile First Styles --- */
         :root {
-            --primary-bg: #f4f7f9;
-            --secondary-bg: #ffffff;
-            --text-color: #333;
-            --primary-color: #007bff;
-            --accent-color-1: #dc3545; /* Pengeluaran */
-            --accent-color-2: #28a745; /* Pemasukkan */
-            --accent-color-3: #17a2b8; /* Cash */
-            --border-color: #e0e0e0;
+            --primary-bg: #f4f7f9; --secondary-bg: #ffffff; --text-color: #333;
+            --primary-color: #007bff; --accent-color-1: #dc3545; --accent-color-2: #28a745;
+            --accent-color-3: #17a2b8; --border-color: #e0e0e0;
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--primary-bg);
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 15px;
-        }
-
-        header {
-            text-align: center;
-            padding: 20px 0;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            color: var(--primary-color);
-            font-size: 1.8em;
-        }
-        
-        h2 {
-            font-size: 1.4em;
-            margin-bottom: 15px;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 5px;
-        }
-        
-        h3 {
-            font-size: 1.2em;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        /* --- Navigation Menu --- */
-        nav {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 25px;
-        }
-
-        nav button {
-            flex-grow: 1;
-            padding: 12px 8px;
-            font-size: 0.9em;
-            font-weight: bold;
-            cursor: pointer;
-            border: 1px solid var(--primary-color);
-            background-color: var(--secondary-bg);
-            color: var(--primary-color);
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        nav button.active,
-        nav button:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        /* --- Content Sections --- */
-        .content-section {
-            display: none;
-            background-color: var(--secondary-bg);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-        }
-
-        .content-section.active {
-            display: block;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- Utility & Components --- */
-        .card-container {
-            display: grid;
-            gap: 15px;
-        }
-
-        .card {
-            background: #fafafa;
-            border-left: 5px solid var(--primary-color);
-            padding: 15px;
-            border-radius: 5px;
-        }
-        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--primary-bg); color: var(--text-color); line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; padding: 15px; }
+        header { text-align: center; padding: 20px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 20px; }
+        h1 { color: var(--primary-color); font-size: 1.8em; }
+        h2 { font-size: 1.4em; margin-bottom: 15px; color: var(--primary-color); border-bottom: 2px solid var(--primary-color); padding-bottom: 5px; }
+        h3 { font-size: 1.2em; margin-bottom: 10px; color: #333; }
+        nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; }
+        nav button { flex-grow: 1; padding: 12px 8px; font-size: 0.9em; font-weight: bold; cursor: pointer; border: 1px solid var(--primary-color); background-color: var(--secondary-bg); color: var(--primary-color); border-radius: 8px; transition: all 0.3s ease; }
+        nav button.active, nav button:hover { background-color: var(--primary-color); color: white; }
+        .content-section { display: none; background-color: var(--secondary-bg); padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
+        .content-section.active { display: block; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .card-container { display: grid; gap: 15px; }
+        .card { background: #fafafa; border-left: 5px solid var(--primary-color); padding: 15px; border-radius: 5px; }
         .card ul { list-style-position: inside; padding-left: 5px; }
         .card li { margin-bottom: 5px; }
-
         .card-opex { border-color: var(--accent-color-1); }
         .card-invest { border-color: var(--accent-color-2); }
-        
         .highlight { font-weight: bold; color: var(--primary-color); }
-        
-        .info-box {
-            background-color: #e7f3ff;
-            border-left: 5px solid #007bff;
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 5px;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        
-        th, td {
-            text-align: left;
-            padding: 10px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
+        .info-box { background-color: #e7f3ff; border-left: 5px solid #007bff; padding: 15px; margin-top: 20px; border-radius: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--border-color); }
         th { background-color: #f2f2f2; }
-        
-        td:nth-child(n+2) { text-align: right; } /* Align numbers to the right */
-
-        .chart-container {
-            position: relative;
-            height: 300px;
-            width: 100%;
-            margin-top: 20px;
-        }
-        
-        .projection-controls {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .projection-controls label {
-            font-weight: bold;
-        }
-        
-        .projection-controls select {
-            padding: 8px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            font-size: 1em;
-        }
-        
-        /* --- Desktop Styles --- */
+        td:nth-child(n+2) { text-align: right; }
+        .chart-container { position: relative; height: 300px; width: 100%; margin-top: 20px; }
+        .projection-controls { display: flex; gap: 15px; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
+        .projection-controls label { font-weight: bold; }
+        .projection-controls select { padding: 8px; border-radius: 5px; border: 1px solid #ccc; font-size: 1em; }
         @media (min-width: 768px) {
             h1 { font-size: 2.2em; }
             nav button { font-size: 1em; padding: 12px 10px; }
@@ -193,137 +52,78 @@
 
     <div class="container">
         <header>
-            <h1>Budget Plan Investasi 15 Bulan</h1>
+            <h1>Budget Plan & Proyeksi 5 Tahun</h1>
         </header>
 
         <nav id="main-menu">
             <button data-target="ringkasan" class="active">Ringkasan</button>
             <button data-target="alokasi">Alokasi Dana</button>
-            <button data-target="arus-kas">Arus Kas Awal</button>
-            <button data-target="proyeksi">Proyeksi Jangka Panjang</button>
+            <button data-target="proyeksi">Analisis & Proyeksi Arus Kas</button>
             <button data-target="kesimpulan">Kesimpulan</button>
         </nav>
 
         <main>
-            <!-- Section 1: Ringkasan -->
             <section id="ringkasan" class="content-section active">
-                <h2>Ringkasan Anggaran</h2>
-                <p>Rencana anggaran ini dialokasikan dari total dana sebesar <span class="highlight">Rp 200.000.000</span> untuk periode 15 bulan. Dana dibagi secara merata untuk dua pos utama.</p>
+                <h2>Ringkasan Anggaran Awal</h2>
+                <p>Rencana anggaran ini dialokasikan dari total dana sebesar <span class="highlight">Rp 200.000.000</span>. Dana dibagi secara merata untuk dua pos utama.</p>
                 <div class="card-container" style="margin-top: 20px;">
-                    <div class="card card-invest">
-                        <h3>Investasi (50%)</h3>
-                        <p>Total: <span class="highlight">Rp 100.000.000</span></p>
-                        <p>Fokus pada konversi aset kas menjadi aset properti (tanah dan bangunan).</p>
-                    </div>
-                    <div class="card card-opex">
-                        <h3>Opex (50%)</h3>
-                        <p>Total: <span class="highlight">Rp 100.000.000</span></p>
-                        <p>Mencakup biaya operasional, pelunasan hutang, dan biaya hangus lainnya.</p>
-                    </div>
+                    <div class="card card-invest"><h3>Investasi (50%)</h3><p>Total: <span class="highlight">Rp 100.000.000</span></p><p>Fokus pada konversi aset kas menjadi aset properti (tanah dan bangunan).</p></div>
+                    <div class="card card-opex"><h3>Opex (50%)</h3><p>Total: <span class="highlight">Rp 100.000.000</span></p><p>Mencakup biaya operasional, pelunasan hutang, dan biaya hangus lainnya.</p></div>
                 </div>
             </section>
 
-            <!-- Section 2: Alokasi Dana -->
             <section id="alokasi" class="content-section">
                 <h2>Rincian Alokasi Dana</h2>
                 <div class="card-container">
-                    <div class="card card-invest">
-                        <h3>Detail Investasi</h3>
-                        <ul>
-                            <li><strong>Land (Tanah):</strong> Rp 50.000.000</li>
-                            <li><strong>Dwellings (Bangunan):</strong> Rp 50.000.000</li>
-                        </ul>
-                    </div>
-                    <div class="card card-opex">
-                        <h3>Detail Opex</h3>
-                        <ul>
-                            <li><strong>Operasional (9 bln):</strong> Rp 45.000.000</li>
-                            <li><strong>Transisi (6 bln):</strong> Rp 30.000.000</li>
-                            <li><strong>Pelunasan Hutang:</strong> Rp 20.000.000</li>
-                            <li><strong>Belanja Hibah:</strong> Rp 5.000.000</li>
-                        </ul>
-                    </div>
+                    <div class="card card-invest"><h3>Detail Investasi</h3><ul><li><strong>Land (Tanah):</strong> Rp 50.000.000</li><li><strong>Dwellings (Bangunan):</strong> Rp 50.000.000</li></ul></div>
+                    <div class="card card-opex"><h3>Detail Opex</h3><ul><li><strong>Operasional (9 bln):</strong> Rp 45.000.000</li><li><strong>Transisi (6 bln):</strong> Rp 30.000.000</li><li><strong>Pelunasan Hutang:</strong> Rp 20.000.000</li><li><strong>Belanja Hibah:</strong> Rp 5.000.000</li></ul></div>
                 </div>
-                <div class="info-box">
-                    <h3>Membedakan Biaya dan Investasi</h3>
-                    <p>Alokasi dana untuk <strong>Investasi (Rp 100.000.000)</strong> bukanlah biaya hangus. Dana ini digunakan untuk mengkonversi aset kas menjadi aset properti (Tanah & Bangunan) yang nilainya akan tetap ada dan berpotensi meningkat di masa depan.</p>
-                </div>
+                <div class="info-box"><h3>Membedakan Biaya dan Investasi</h3><p>Alokasi dana untuk <strong>Investasi (Rp 100.000.000)</strong> bukanlah biaya hangus. Dana ini digunakan untuk mengkonversi aset kas menjadi aset properti yang nilainya akan tetap ada dan berpotensi meningkat di masa depan.</p></div>
             </section>
 
-            <!-- Section 3: Arus Kas Awal -->
-            <section id="arus-kas" class="content-section">
-                <h2>Analisis Arus Kas Periode Awal (15 Bulan)</h2>
-                <p>Grafik di bawah ini menunjukkan proyeksi pengeluaran, pemasukan, dan saldo kas selama 15 bulan pertama. Penurunan kas yang tajam di awal mencerminkan keberhasilan konversi aset tunai menjadi aset properti.</p>
-                <div class="chart-container">
-                    <canvas id="cashFlowChart"></canvas>
-                </div>
-            </section>
-
-            <!-- Section 4: Proyeksi Jangka Panjang -->
             <section id="proyeksi" class="content-section">
-                <h2>Proyeksi Jangka Panjang (Tahun ke 3-5)</h2>
-                <p>Berikut adalah proyeksi pertumbuhan berdasarkan dua skenario. Proyeksi ini mengasumsikan tidak ada investasi besar baru dan kenaikan Opex tahunan sebesar 5% karena inflasi.</p>
+                <h2>Analisis & Proyeksi Arus Kas (5 Tahun)</h2>
+                <p>Grafik ini menunjukkan performa arus kas dari 15 bulan awal, dilanjutkan dengan prediksi hingga akhir tahun ke-5. Pilih skenario untuk melihat dampaknya pada pertumbuhan jangka panjang.</p>
                 
                 <div class="projection-controls">
-                    <label for="scenario-select">Pilih Skenario:</label>
+                    <label for="scenario-select">Pilih Skenario Pertumbuhan:</label>
                     <select id="scenario-select">
-                        <option value="moderat" selected>Moderat (Growth Pemasukan 40%/tahun)</option>
-                        <option value="konservatif">Konservatif (Growth Pemasukan 15%/tahun)</option>
+                        <option value="konservatif" selected>Konservatif (Pemasukan +5%/tahun)</option>
+                        <option value="moderat">Moderat (Pemasukan +10%/tahun)</option>
                     </select>
-                </div>
-
-                <div class="table-responsive">
-                    <table id="projection-table">
-                        <thead>
-                            <tr>
-                                <th>Metrik</th>
-                                <th>Tahun ke-3</th>
-                                <th>Tahun ke-4</th>
-                                <th>Tahun ke-5</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Data diisi oleh JavaScript -->
-                        </tbody>
-                    </table>
                 </div>
 
                 <div class="chart-container">
                     <canvas id="projectionChart"></canvas>
                 </div>
+                
+                <h3 style="margin-top: 30px;">Ringkasan Proyeksi Tahunan</h3>
+                <div class="table-responsive">
+                    <table id="projection-table">
+                        <thead>
+                            <tr><th>Metrik</th><th>Tahun ke-3</th><th>Tahun ke-4</th><th>Tahun ke-5</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </section>
 
-            <!-- Section 5: Kesimpulan -->
             <section id="kesimpulan" class="content-section">
                 <h2>Kesimpulan & Poin Kunci</h2>
                 <ul>
                     <li><strong>Pembentukan Aset:</strong> Periode awal berhasil mengkonversi <span class="highlight">Rp 100.000.000</span> kas menjadi aset properti yang bernilai jangka panjang.</li>
                     <li><strong>Titik Kritis Terlewati:</strong> Saldo kas mencapai titik terendah pada <span class="highlight">Bulan ke-9 (Rp 35,5 jt)</span> dan mulai pulih seiring meningkatnya pemasukan.</li>
-                    <li><strong>Potensi Pertumbuhan:</strong> Proyeksi jangka panjang menunjukkan bisnis ini sangat profitabel dan memiliki arus kas yang sehat, membuka peluang ekspansi di masa depan.</li>
+                    <li><strong>Potensi Pertumbuhan:</strong> Proyeksi jangka panjang menunjukkan bisnis ini sangat profitabel dan memiliki arus kas yang sehat, bahkan dalam skenario pertumbuhan yang konservatif.</li>
                 </ul>
                 
                 <div style="margin-top: 25px;">
                     <h3>Posisi Aset di Akhir Periode Awal (Bulan ke-15)</h3>
                      <table>
-                        <thead>
-                            <tr>
-                                <th>Jenis Aset</th>
-                                <th>Nilai</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Jenis Aset</th><th>Nilai</th></tr></thead>
                         <tbody>
-                            <tr>
-                                <td>Aset Lancar (Kas)</td>
-                                <td>Rp 55.000.000</td>
-                            </tr>
-                            <tr>
-                                <td>Aset Tetap (Properti)</td>
-                                <td>Rp 100.000.000</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Total Estimasi Nilai Aset</strong></td>
-                                <td><strong>Rp 155.000.000</strong></td>
-                            </tr>
+                            <tr><td>Aset Lancar (Kas)</td><td>Rp 55.000.000</td></tr>
+                            <tr><td>Aset Tetap (Properti)</td><td>Rp 100.000.000</td></tr>
+                            <tr><td><strong>Total Estimasi Nilai Aset</strong></td><td><strong>Rp 155.000.000</strong></td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -333,107 +133,135 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // --- Logic for Menu and Section Toggling ---
             const menu = document.getElementById('main-menu');
             const sections = document.querySelectorAll('.content-section');
-
             menu.addEventListener('click', function(event) {
                 if (event.target.tagName === 'BUTTON') {
                     const targetId = event.target.getAttribute('data-target');
                     menu.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
                     event.target.classList.add('active');
-                    sections.forEach(section => {
-                        section.classList.toggle('active', section.id === targetId);
-                    });
+                    sections.forEach(section => section.classList.toggle('active', section.id === targetId));
                 }
             });
 
-            // --- Chart.js: Initial 15-Month Cash Flow ---
-            const cashFlowCtx = document.getElementById('cashFlowChart').getContext('2d');
-            const labels15Bulan = ['M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', 'M11', 'M12', 'M13', 'M14', 'M15'];
-            new Chart(cashFlowCtx, {
-                type: 'line',
-                data: {
-                    labels: labels15Bulan,
-                    datasets: [
-                        { label: 'Pengeluaran', data: [8000000, 26000000, 6000000, 17500000, 21666667, 38333333, 25833333, 17500000, 9166667, 5000000, 5000000, 5000000, 5000000, 5000000, 5000000], borderColor: 'rgba(220, 53, 69, 0.8)', backgroundColor: 'rgba(220, 53, 69, 0.1)', yAxisID: 'y', tension: 0.1, fill: true },
-                        { label: 'Pemasukkan', data: [0, 0, 0, 0, 0, 0, 1000000, 1500000, 3000000, 4500000, 6000000, 7500000, 9000000, 10500000, 12000000], borderColor: 'rgba(40, 167, 69, 0.8)', backgroundColor: 'rgba(40, 167, 69, 0.1)', yAxisID: 'y', tension: 0.1, fill: true },
-                        { label: 'Saldo Kas', data: [192000000, 166000000, 160000000, 142500000, 120833333, 82500000, 57666667, 41666667, 35500000, 35000000, 36000000, 38500000, 42500000, 48000000, 55000000], borderColor: 'rgba(23, 162, 184, 1)', backgroundColor: 'rgba(23, 162, 184, 0.1)', yAxisID: 'y1', tension: 0.1 }
-                    ]
-                },
-                options: commonChartOptions('Proyeksi Arus Kas Awal (15 Bulan)', true)
-            });
-
-            // --- Logic for Long-Term Projections ---
             const scenarioSelect = document.getElementById('scenario-select');
             const projectionTableBody = document.querySelector("#projection-table tbody");
             const projectionCtx = document.getElementById('projectionChart').getContext('2d');
             let projectionChart;
 
             const scenarios = {
-                moderat: { incomeGrowth: 0.40, name: 'Moderat' },
-                konservatif: { incomeGrowth: 0.15, name: 'Konservatif' }
+                moderat: { incomeGrowth: 0.10, name: 'Moderat' },
+                konservatif: { incomeGrowth: 0.05, name: 'Konservatif' }
             };
-
-            function calculateProjection(scenario) {
-                const { incomeGrowth } = scenarios[scenario];
-                const opexGrowth = 0.05;
-
-                let pemasukanY2 = 171000000; // Pemasukan tahunan di akhir tahun ke-2
-                let opexY2 = 60000000;       // Opex tahunan di akhir tahun ke-2
-                let kasY2 = 149500000;        // Saldo kas di akhir tahun ke-2
-
-                const results = {
-                    pemasukan: [], opex: [], laba: [], kas: []
-                };
-
-                for (let i = 0; i < 3; i++) {
-                    pemasukanY2 *= (1 + incomeGrowth);
-                    opexY2 *= (1 + opexGrowth);
-                    const labaCurrent = pemasukanY2 - opexY2;
-                    kasY2 += labaCurrent;
-                    
-                    results.pemasukan.push(pemasukanY2);
-                    results.opex.push(opexY2);
-                    results.laba.push(labaCurrent);
-                    results.kas.push(kasY2);
-                }
-                return results;
-            }
 
             function formatCurrency(value) {
                 return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(value);
             }
 
+            function formatAxis(value) {
+                if (value >= 1e9) return (value / 1e9) + ' M';
+                if (value >= 1e6) return (value / 1e6) + ' Jt';
+                return value;
+            }
+
+            function calculateProjection(scenario) {
+                const { incomeGrowth } = scenarios[scenario];
+                const opexGrowth = 0.05;
+
+                const labels = [];
+                const kasData = [];
+                const labaData = [];
+                const tableData = { pemasukan: [], opex: [], laba: [], kas: [] };
+
+                // --- Phase 1: Initial 15 Months (Actual Data) ---
+                const initialKas = [192000000, 166000000, 160000000, 142500000, 120833333, 82500000, 57666667, 41666667, 35500000, 35000000, 36000000, 38500000, 42500000, 48000000, 55000000];
+                const initialPemasukan = [0, 0, 0, 0, 0, 0, 1000000, 1500000, 3000000, 4500000, 6000000, 7500000, 9000000, 10500000, 12000000];
+                const initialPengeluaran = [8000000, 26000000, 6000000, 17500000, 21666667, 38333333, 25833333, 17500000, 9166667, 5000000, 5000000, 5000000, 5000000, 5000000, 5000000];
+                
+                for(let i = 0; i < 15; i++) {
+                    labels.push(`M${i+1}`);
+                    kasData.push(initialKas[i]);
+                    labaData.push(initialPemasukan[i] - initialPengeluaran[i]);
+                }
+
+                // --- Phase 2: Extrapolate Months 16-24 ---
+                let lastPemasukan = initialPemasukan[14];
+                let lastKas = initialKas[14];
+                const stableOpex = 5000000;
+                let pemasukanY2Total = initialPemasukan.slice(12).reduce((a, b) => a + b, 0);
+
+                for (let i = 16; i <= 24; i++) {
+                    labels.push(`M${i}`);
+                    lastPemasukan += 1500000; // Extrapolate based on prior trend
+                    const currentLaba = lastPemasukan - stableOpex;
+                    lastKas += currentLaba;
+                    
+                    labaData.push(currentLaba);
+                    kasData.push(lastKas);
+                    pemasukanY2Total += lastPemasukan;
+                }
+                
+                // --- Phase 3: Project Years 3-5 ---
+                let pemasukanTahunan = pemasukanY2Total;
+                let opexTahunan = stableOpex * 12;
+                let kasTahunan = lastKas;
+
+                for (let i = 3; i <= 5; i++) {
+                    labels.push(`Thn-${i}`);
+                    pemasukanTahunan *= (1 + incomeGrowth);
+                    opexTahunan *= (1 + opexGrowth);
+                    const labaTahunan = pemasukanTahunan - opexTahunan;
+                    kasTahunan += labaTahunan;
+
+                    labaData.push(labaTahunan);
+                    kasData.push(kasTahunan);
+                    tableData.pemasukan.push(pemasukanTahunan);
+                    tableData.opex.push(opexTahunan);
+                    tableData.laba.push(labaTahunan);
+                    tableData.kas.push(kasTahunan);
+                }
+
+                return { labels, kasData, labaData, tableData };
+            }
+
             function updateProjectionUI(scenario) {
-                const data = calculateProjection(scenario);
+                const { labels, kasData, labaData, tableData } = calculateProjection(scenario);
                 
                 // Update Table
                 projectionTableBody.innerHTML = `
-                    <tr><td>Pemasukan Tahunan</td>${data.pemasukan.map(v => `<td>${formatCurrency(v)}</td>`).join('')}</tr>
-                    <tr><td>Opex Tahunan</td>${data.opex.map(v => `<td>${formatCurrency(v)}</td>`).join('')}</tr>
-                    <tr><td><strong>Laba Operasional</strong></td>${data.laba.map(v => `<td><strong>${formatCurrency(v)}</strong></td>`).join('')}</tr>
-                    <tr><td><strong>Saldo Kas Akhir</strong></td>${data.kas.map(v => `<td><strong>${formatCurrency(v)}</strong></td>`).join('')}</tr>
+                    <tr><td>Pemasukan Tahunan</td>${tableData.pemasukan.map(v => `<td>${formatCurrency(v)}</td>`).join('')}</tr>
+                    <tr><td>Opex Tahunan</td>${tableData.opex.map(v => `<td>${formatCurrency(v)}</td>`).join('')}</tr>
+                    <tr><td><strong>Laba Operasional</strong></td>${tableData.laba.map(v => `<td><strong>${formatCurrency(v)}</strong></td>`).join('')}</tr>
+                    <tr><td><strong>Saldo Kas Akhir</strong></td>${tableData.kas.map(v => `<td><strong>${formatCurrency(v)}</strong></td>`).join('')}</tr>
                 `;
 
                 // Update Chart
                 const chartData = {
-                    labels: ['Tahun ke-3', 'Tahun ke-4', 'Tahun ke-5'],
+                    labels: labels,
                     datasets: [
-                        { label: 'Laba Operasional', data: data.laba, borderColor: 'rgba(40, 167, 69, 0.8)', backgroundColor: 'rgba(40, 167, 69, 0.1)', yAxisID: 'y', tension: 0.1, fill: true },
-                        { label: 'Saldo Kas Akhir', data: data.kas, borderColor: 'rgba(23, 162, 184, 1)', backgroundColor: 'rgba(23, 162, 184, 0.1)', yAxisID: 'y1', tension: 0.1 }
+                        { label: 'Laba Operasional', data: labaData, borderColor: 'rgba(40, 167, 69, 0.8)', backgroundColor: 'rgba(40, 167, 69, 0.1)', yAxisID: 'y', tension: 0.1, fill: true },
+                        { label: 'Akumulasi Saldo Kas', data: kasData, borderColor: 'rgba(23, 162, 184, 1)', backgroundColor: 'rgba(23, 162, 184, 0.1)', yAxisID: 'y1', tension: 0.1 }
                     ]
                 };
 
                 if (projectionChart) {
                     projectionChart.data = chartData;
-                    projectionChart.options.plugins.title.text = `Proyeksi Skenario ${scenarios[scenario].name}`;
                     projectionChart.update();
                 } else {
                     projectionChart = new Chart(projectionCtx, {
-                        type: 'line',
-                        data: chartData,
-                        options: commonChartOptions(`Proyeksi Skenario ${scenarios[scenario].name}`, false)
+                        type: 'line', data: chartData,
+                        options: {
+                            responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+                            plugins: {
+                                title: { display: true, text: 'Proyeksi Laba dan Akumulasi Kas (5 Tahun)', font: { size: 16 } },
+                                tooltip: { callbacks: { label: context => `${context.dataset.label || ''}: ${formatCurrency(context.parsed.y)}` } }
+                            },
+                            scales: {
+                                x: { title: { display: true, text: 'Periode' } },
+                                y: { type: 'linear', position: 'left', title: { display: true, text: 'Laba Operasional (Rp)' }, ticks: { callback: formatAxis } },
+                                y1: { type: 'linear', position: 'right', title: { display: true, text: 'Saldo Kas (Rp)' }, grid: { drawOnChartArea: false }, ticks: { callback: formatAxis } }
+                            }
+                        }
                     });
                 }
             }
@@ -441,36 +269,7 @@
             scenarioSelect.addEventListener('change', (e) => updateProjectionUI(e.target.value));
             
             // Initial call to render the default scenario
-            updateProjectionUI('moderat');
-
-            // --- Helper function for Chart Options ---
-            function commonChartOptions(title, showInitialCashFlowAxes) {
-                const scales = {
-                    x: { title: { display: true, text: 'Periode' } },
-                    y: {
-                        type: 'linear', display: true, position: 'left',
-                        title: { display: true, text: showInitialCashFlowAxes ? 'Pemasukan / Pengeluaran (Rp)' : 'Laba Operasional (Rp)' },
-                        ticks: { callback: value => value / 1000000 + ' Jt' }
-                    },
-                     y1: {
-                        type: 'linear', display: true, position: 'right',
-                        title: { display: true, text: 'Saldo Kas (Rp)' },
-                        grid: { drawOnChartArea: false },
-                        ticks: { callback: value => value / 1000000 + ' Jt' }
-                    }
-                };
-
-                return {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: { mode: 'index', intersect: false },
-                    plugins: {
-                        title: { display: true, text: title, font: { size: 16 } },
-                        tooltip: { callbacks: { label: context => `${context.dataset.label || ''}: ${formatCurrency(context.parsed.y)}` } }
-                    },
-                    scales: scales
-                };
-            }
+            updateProjectionUI('konservatif');
         });
     </script>
 
