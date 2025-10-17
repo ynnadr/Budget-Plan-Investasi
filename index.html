@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualisasi Budgeting - Cash Flow</title>
+    <title>Visualisasi Budgeting - Perbandingan Plan vs Aktual</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
@@ -11,21 +11,25 @@
         th, td { border: 1px solid #ddd; padding: 8px; text-align: right; }
         th { background-color: #f2f2f2; }
         input { width: 100px; text-align: right; }
-        #chartContainer { width: 100%; height: 400px; }
+        #chartContainer { width: 100%; height: 500px; }
         button { margin: 10px 0; padding: 10px; }
+        .legend { margin-top: 10px; }
     </style>
 </head>
 <body>
-    <h1>Visualisasi Arus Kas Budgeting (M1 - M15)</h1>
-    <p>Input angka aktual untuk Pengeluaran dan Pemasukkan per bulan (dalam Rupiah, tanpa koma). Saldo Kas akan dihitung otomatis. Chart akan update secara real-time.</p>
+    <h1>Visualisasi Arus Kas Budgeting: Plan vs Aktual (M1 - M15)</h1>
+    <p>Data dari CSV adalah <strong>Plan</strong> (budget dan cash flow). Masukkan <strong>Aktual</strong> secara manual untuk Pengeluaran dan Pemasukkan per bulan (dalam Rupiah, tanpa koma). Saldo Kas Aktual dihitung otomatis. Chart menampilkan perbandingan visual antara Plan (garis putus-putus) dan Aktual (garis solid).</p>
     
     <table id="dataTable">
         <thead>
             <tr>
                 <th>Bulan</th>
-                <th>Pengeluaran (Aktual)</th>
-                <th>Pemasukkan (Aktual)</th>
-                <th>Saldo Kas Akhir (Otomatis)</th>
+                <th>Plan Pengeluaran</th>
+                <th>Aktual Pengeluaran</th>
+                <th>Plan Pemasukkan</th>
+                <th>Aktual Pemasukkan</th>
+                <th>Plan Saldo Kas Akhir</th>
+                <th>Aktual Saldo Kas Akhir</th>
             </tr>
         </thead>
         <tbody>
@@ -33,14 +37,14 @@
         </tbody>
     </table>
     
-    <button onclick="resetToProjection()">Reset ke Proyeksi Awal</button>
+    <button onclick="resetToProjection()">Reset ke Plan Awal</button>
     
     <div id="chartContainer">
         <canvas id="cashFlowChart"></canvas>
     </div>
 
     <script>
-        // Data proyeksi awal (dalam Rupiah)
+        // Data plan dari CSV (dalam Rupiah)
         const projection = {
             months: ['M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', 'M11', 'M12', 'M13', 'M14', 'M15'],
             pengeluaran: [8000000, 26000000, 6000000, 17500000, 21666667, 38333333, 25833333, 17500000, 9166667, 5000000, 5000000, 5000000, 5000000, 5000000, 5000000],
@@ -48,7 +52,7 @@
             cash: [192000000, 166000000, 160000000, 142500000, 120833333, 82500000, 57666667, 41666667, 35500000, 35000000, 36000000, 38500000, 42500000, 48000000, 55000000]
         };
 
-        // Variabel global untuk data aktual
+        // Variabel global untuk data aktual (inisial sama dengan plan)
         let actualData = {
             pengeluaran: [...projection.pengeluaran],
             pemasukkan: [...projection.pemasukkan],
@@ -65,8 +69,11 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${month}</td>
+                    <td>${formatNumber(projection.pengeluaran[index])}</td>
                     <td><input type="number" id="pengeluaran_${index}" value="${actualData.pengeluaran[index]}" onchange="updateData(${index}, 'pengeluaran', this.value)"></td>
+                    <td>${formatNumber(projection.pemasukkan[index])}</td>
                     <td><input type="number" id="pemasukkan_${index}" value="${actualData.pemasukkan[index]}" onchange="updateData(${index}, 'pemasukkan', this.value)"></td>
+                    <td>${formatNumber(projection.cash[index])}</td>
                     <td id="cash_${index}">${formatNumber(actualData.cash[index])}</td>
                 `;
                 tbody.appendChild(row);
@@ -77,14 +84,14 @@
             const numValue = parseFloat(value) || 0;
             actualData[type][index] = numValue;
 
-            // Update saldo kas secara kumulatif
+            // Update saldo kas aktual secara kumulatif (saldo awal 200jt)
             if (index === 0) {
-                actualData.cash[0] = 200000000 - actualData.pengeluaran[0] + actualData.pemasukkan[0]; // Asumsi saldo awal 200jt
+                actualData.cash[0] = 200000000 - actualData.pengeluaran[0] + actualData.pemasukkan[0];
             } else {
                 actualData.cash[index] = actualData.cash[index - 1] - actualData.pengeluaran[index] + actualData.pemasukkan[index];
             }
 
-            // Update tampilan cash
+            // Update tampilan cash aktual
             document.getElementById(`cash_${index}`).textContent = formatNumber(actualData.cash[index]);
 
             // Update chart
@@ -105,40 +112,90 @@
                 data: {
                     labels: projection.months,
                     datasets: [
+                        // Plan Saldo Kas
                         {
-                            label: 'Saldo Kas',
-                            data: actualData.cash,
+                            label: 'Plan Saldo Kas',
+                            data: projection.cash,
                             borderColor: 'blue',
+                            borderDash: [5, 5],
                             backgroundColor: 'rgba(0, 0, 255, 0.1)',
                             fill: false,
-                            yAxisID: 'y'
+                            yAxisID: 'y',
+                            tension: 0.1
                         },
+                        // Aktual Saldo Kas
                         {
-                            label: 'Pengeluaran',
-                            data: actualData.pengeluaran,
+                            label: 'Aktual Saldo Kas',
+                            data: actualData.cash,
+                            borderColor: 'darkblue',
+                            backgroundColor: 'rgba(0, 0, 139, 0.1)',
+                            fill: false,
+                            yAxisID: 'y',
+                            tension: 0.1
+                        },
+                        // Plan Pengeluaran
+                        {
+                            label: 'Plan Pengeluaran',
+                            data: projection.pengeluaran,
                             borderColor: 'red',
+                            borderDash: [5, 5],
                             backgroundColor: 'rgba(255, 0, 0, 0.1)',
                             fill: false,
-                            yAxisID: 'y1'
+                            yAxisID: 'y1',
+                            tension: 0.1
                         },
+                        // Aktual Pengeluaran
                         {
-                            label: 'Pemasukkan',
-                            data: actualData.pemasukkan,
+                            label: 'Aktual Pengeluaran',
+                            data: actualData.pengeluaran,
+                            borderColor: 'darkred',
+                            backgroundColor: 'rgba(139, 0, 0, 0.1)',
+                            fill: false,
+                            yAxisID: 'y1',
+                            tension: 0.1
+                        },
+                        // Plan Pemasukkan
+                        {
+                            label: 'Plan Pemasukkan',
+                            data: projection.pemasukkan,
                             borderColor: 'green',
+                            borderDash: [5, 5],
                             backgroundColor: 'rgba(0, 255, 0, 0.1)',
                             fill: false,
-                            yAxisID: 'y1'
+                            yAxisID: 'y1',
+                            tension: 0.1
+                        },
+                        // Aktual Pemasukkan
+                        {
+                            label: 'Aktual Pemasukkan',
+                            data: actualData.pemasukkan,
+                            borderColor: 'darkgreen',
+                            backgroundColor: 'rgba(0, 100, 0, 0.1)',
+                            fill: false,
+                            yAxisID: 'y1',
+                            tension: 0.1
                         }
                     ]
                 },
                 options: {
                     responsive: true,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    },
                     scales: {
                         y: {
                             type: 'linear',
                             display: true,
                             position: 'left',
-                            title: { display: true, text: 'Saldo Kas (Rp)' }
+                            title: { display: true, text: 'Saldo Kas (Rp)' },
+                            grid: { drawOnChartArea: true }
                         },
                         y1: {
                             type: 'linear',
