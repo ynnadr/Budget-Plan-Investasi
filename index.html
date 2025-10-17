@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualisasi Budgeting - Cash Flow</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: right; }
+        th { background-color: #f2f2f2; }
+        input { width: 100px; text-align: right; }
+        #chartContainer { width: 100%; height: 400px; }
+        button { margin: 10px 0; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Visualisasi Arus Kas Budgeting (M1 - M15)</h1>
+    <p>Input angka aktual untuk Pengeluaran dan Pemasukkan per bulan (dalam Rupiah, tanpa koma). Saldo Kas akan dihitung otomatis. Chart akan update secara real-time.</p>
+    
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>Bulan</th>
+                <th>Pengeluaran (Aktual)</th>
+                <th>Pemasukkan (Aktual)</th>
+                <th>Saldo Kas Akhir (Otomatis)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data akan diisi oleh JavaScript -->
+        </tbody>
+    </table>
+    
+    <button onclick="resetToProjection()">Reset ke Proyeksi Awal</button>
+    
+    <div id="chartContainer">
+        <canvas id="cashFlowChart"></canvas>
+    </div>
+
+    <script>
+        // Data proyeksi awal (dalam Rupiah)
+        const projection = {
+            months: ['M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', 'M11', 'M12', 'M13', 'M14', 'M15'],
+            pengeluaran: [8000000, 26000000, 6000000, 17500000, 21666667, 38333333, 25833333, 17500000, 9166667, 5000000, 5000000, 5000000, 5000000, 5000000, 5000000],
+            pemasukkan: [0, 0, 0, 0, 0, 0, 1000000, 1500000, 3000000, 4500000, 6000000, 7500000, 9000000, 10500000, 12000000],
+            cash: [192000000, 166000000, 160000000, 142500000, 120833333, 82500000, 57666667, 41666667, 35500000, 35000000, 36000000, 38500000, 42500000, 48000000, 55000000]
+        };
+
+        // Variabel global untuk data aktual
+        let actualData = {
+            pengeluaran: [...projection.pengeluaran],
+            pemasukkan: [...projection.pemasukkan],
+            cash: [...projection.cash]
+        };
+
+        // Inisialisasi chart
+        let chart;
+
+        function initTable() {
+            const tbody = document.querySelector('#dataTable tbody');
+            tbody.innerHTML = '';
+            projection.months.forEach((month, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${month}</td>
+                    <td><input type="number" id="pengeluaran_${index}" value="${actualData.pengeluaran[index]}" onchange="updateData(${index}, 'pengeluaran', this.value)"></td>
+                    <td><input type="number" id="pemasukkan_${index}" value="${actualData.pemasukkan[index]}" onchange="updateData(${index}, 'pemasukkan', this.value)"></td>
+                    <td id="cash_${index}">${formatNumber(actualData.cash[index])}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateData(index, type, value) {
+            const numValue = parseFloat(value) || 0;
+            actualData[type][index] = numValue;
+
+            // Update saldo kas secara kumulatif
+            if (index === 0) {
+                actualData.cash[0] = 200000000 - actualData.pengeluaran[0] + actualData.pemasukkan[0]; // Asumsi saldo awal 200jt
+            } else {
+                actualData.cash[index] = actualData.cash[index - 1] - actualData.pengeluaran[index] + actualData.pemasukkan[index];
+            }
+
+            // Update tampilan cash
+            document.getElementById(`cash_${index}`).textContent = formatNumber(actualData.cash[index]);
+
+            // Update chart
+            updateChart();
+        }
+
+        function formatNumber(num) {
+            return new Intl.NumberFormat('id-ID').format(num);
+        }
+
+        function updateChart() {
+            const ctx = document.getElementById('cashFlowChart').getContext('2d');
+            if (chart) {
+                chart.destroy();
+            }
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: projection.months,
+                    datasets: [
+                        {
+                            label: 'Saldo Kas',
+                            data: actualData.cash,
+                            borderColor: 'blue',
+                            backgroundColor: 'rgba(0, 0, 255, 0.1)',
+                            fill: false,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Pengeluaran',
+                            data: actualData.pengeluaran,
+                            borderColor: 'red',
+                            backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                            fill: false,
+                            yAxisID: 'y1'
+                        },
+                        {
+                            label: 'Pemasukkan',
+                            data: actualData.pemasukkan,
+                            borderColor: 'green',
+                            backgroundColor: 'rgba(0, 255, 0, 0.1)',
+                            fill: false,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: { display: true, text: 'Saldo Kas (Rp)' }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: { display: true, text: 'Pengeluaran/Pemasukkan (Rp)' },
+                            grid: { drawOnChartArea: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function resetToProjection() {
+            actualData.pengeluaran = [...projection.pengeluaran];
+            actualData.pemasukkan = [...projection.pemasukkan];
+            actualData.cash = [...projection.cash];
+            initTable();
+            updateChart();
+        }
+
+        // Inisialisasi halaman
+        window.onload = function() {
+            initTable();
+            updateChart();
+        };
+    </script>
+</body>
+</html>
