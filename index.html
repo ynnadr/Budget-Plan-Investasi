@@ -14,11 +14,69 @@
         #chartContainer { width: 100%; height: 500px; }
         button { margin: 10px 0; padding: 10px; }
         .legend { margin-top: 10px; }
+        .category-table th { text-align: left; }
+        .category-table td { text-align: left; }
     </style>
 </head>
 <body>
     <h1>Visualisasi Arus Kas Budgeting: Plan vs Aktual (M1 - M15)</h1>
     <p>Data dari CSV adalah <strong>Plan</strong> (budget dan cash flow). Masukkan <strong>Aktual</strong> secara manual untuk Pengeluaran dan Pemasukkan per bulan (dalam Rupiah, tanpa koma). Saldo Kas Aktual dihitung otomatis. Chart menampilkan perbandingan visual antara Plan (garis putus-putus) dan Aktual (garis solid).</p>
+    
+    <h2>Rincian Pengeluaran berdasarkan Kategori (Plan)</h2>
+    <table class="category-table">
+        <thead>
+            <tr>
+                <th>Kategori</th>
+                <th>Total (Rp)</th>
+                <th>Persentase (%)</th>
+                <th>Keterangan</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Periode Transisi 6 Bulan</td>
+                <td>30.000.000</td>
+                <td>15%</td>
+                <td>Rp5 juta/bulan untuk 6 bulan awal (M1-M6).</td>
+            </tr>
+            <tr>
+                <td>Pelunasan Hutang</td>
+                <td>20.000.000</td>
+                <td>10%</td>
+                <td>Sekali bayar di M2.</td>
+            </tr>
+            <tr>
+                <td>Belanja Hibah</td>
+                <td>5.000.000</td>
+                <td>2.5%</td>
+                <td>Rp3 juta (M1) + Rp1 juta masing-masing (M2-M3).</td>
+            </tr>
+            <tr>
+                <td>Land</td>
+                <td>50.000.000</td>
+                <td>25%</td>
+                <td>Rp12,5 juta (M4-M5) + Rp25 juta (M6).</td>
+            </tr>
+            <tr>
+                <td>Operasional 9 Bulan</td>
+                <td>45.000.000</td>
+                <td>22.5%</td>
+                <td>Rp5 juta/bulan mulai M7-M15.</td>
+            </tr>
+            <tr>
+                <td>Dwellings</td>
+                <td>50.000.000</td>
+                <td>25%</td>
+                <td>Distribusi bertahap: Rp4,17 juta (M5), Rp8,33 juta (M6), Rp20,83 juta (M7), Rp12,5 juta (M8), Rp4,17 juta (M9). Breakdown: 1,2,5,3,sisa.</td>
+            </tr>
+            <tr>
+                <td><strong>Total</strong></td>
+                <td><strong>200.000.000</strong></td>
+                <td><strong>100%</strong></td>
+                <td>-</td>
+            </tr>
+        </tbody>
+    </table>
     
     <table id="dataTable">
         <thead>
