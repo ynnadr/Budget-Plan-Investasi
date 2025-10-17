@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Budget Plan Investasi 5 Tahun</title>
+    <title>Budget Plan & Proyeksi 5 Tahun</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -58,7 +58,7 @@
         <nav id="main-menu">
             <button data-target="ringkasan" class="active">Ringkasan</button>
             <button data-target="alokasi">Alokasi Dana</button>
-            <button data-target="proyeksi">Analisis & Proyeksi Arus Kas</button>
+            <button data-target="proyeksi">Proyeksi Arus Kas Tahunan</button>
             <button data-target="kesimpulan">Kesimpulan</button>
         </nav>
 
@@ -82,8 +82,8 @@
             </section>
 
             <section id="proyeksi" class="content-section">
-                <h2>Analisis & Proyeksi Arus Kas (5 Tahun)</h2>
-                <p>Grafik ini menunjukkan performa arus kas dari 15 bulan awal, dilanjutkan dengan prediksi hingga akhir tahun ke-5. Pilih skenario untuk melihat dampaknya pada pertumbuhan jangka panjang.</p>
+                <h2>Proyeksi Arus Kas Tahunan (5 Tahun)</h2>
+                <p>Grafik ini mengagregasi data bulanan menjadi performa tahunan untuk menampilkan gambaran strategis selama 5 tahun. Tahun pertama menunjukkan kerugian operasional karena investasi besar, namun pulih dengan cepat di tahun kedua dan terus bertumbuh.</p>
                 
                 <div class="projection-controls">
                     <label for="scenario-select">Pilih Skenario Pertumbuhan:</label>
@@ -112,7 +112,7 @@
                 <h2>Kesimpulan & Poin Kunci</h2>
                 <ul>
                     <li><strong>Pembentukan Aset:</strong> Periode awal berhasil mengkonversi <span class="highlight">Rp 100.000.000</span> kas menjadi aset properti yang bernilai jangka panjang.</li>
-                    <li><strong>Titik Kritis Terlewati:</strong> Saldo kas mencapai titik terendah pada <span class="highlight">Bulan ke-9 (Rp 35,5 jt)</span> dan mulai pulih seiring meningkatnya pemasukan.</li>
+                    <li><strong>Pemulihan Cepat:</strong> Meskipun rugi operasional di tahun pertama akibat investasi, bisnis mencapai profitabilitas yang kuat di tahun kedua dan seterusnya.</li>
                     <li><strong>Potensi Pertumbuhan:</strong> Proyeksi jangka panjang menunjukkan bisnis ini sangat profitabel dan memiliki arus kas yang sehat, bahkan dalam skenario pertumbuhan yang konservatif.</li>
                 </ul>
                 
@@ -161,6 +161,7 @@
             function formatAxis(value) {
                 if (value >= 1e9) return (value / 1e9) + ' M';
                 if (value >= 1e6) return (value / 1e6) + ' Jt';
+                if (value <= -1e6) return (value / 1e6) + ' Jt';
                 return value;
             }
 
@@ -168,46 +169,42 @@
                 const { incomeGrowth } = scenarios[scenario];
                 const opexGrowth = 0.05;
 
-                const labels = [];
+                const labels = ['Tahun-1', 'Tahun-2', 'Tahun-3', 'Tahun-4', 'Tahun-5'];
                 const kasData = [];
                 const labaData = [];
                 const tableData = { pemasukan: [], opex: [], laba: [], kas: [] };
 
-                // --- Phase 1: Initial 15 Months (Actual Data) ---
-                const initialKas = [192000000, 166000000, 160000000, 142500000, 120833333, 82500000, 57666667, 41666667, 35500000, 35000000, 36000000, 38500000, 42500000, 48000000, 55000000];
                 const initialPemasukan = [0, 0, 0, 0, 0, 0, 1000000, 1500000, 3000000, 4500000, 6000000, 7500000, 9000000, 10500000, 12000000];
-                const initialPengeluaran = [8000000, 26000000, 6000000, 17500000, 21666667, 38333333, 25833333, 17500000, 9166667, 5000000, 5000000, 5000000, 5000000, 5000000, 5000000];
-                
-                for(let i = 0; i < 15; i++) {
-                    labels.push(`M${i+1}`);
-                    kasData.push(initialKas[i]);
-                    labaData.push(initialPemasukan[i] - initialPengeluaran[i]);
-                }
+                const initialPengeluaran = [8000000, 26000000, 6000000, 17500000, 21666667, 38333333, 25833333, 17500000, 9166667, 5000000, 5000000, 5000000];
+                const kasEndM12 = 38500000;
 
-                // --- Phase 2: Extrapolate Months 16-24 ---
-                let lastPemasukan = initialPemasukan[14];
-                let lastKas = initialKas[14];
-                const stableOpex = 5000000;
-                let pemasukanY2Total = initialPemasukan.slice(12).reduce((a, b) => a + b, 0);
+                // --- Tahun 1 ---
+                const pemasukanY1 = initialPemasukan.slice(0, 12).reduce((a, b) => a + b, 0);
+                const pengeluaranY1 = initialPengeluaran.reduce((a, b) => a + b, 0);
+                const labaY1 = pemasukanY1 - pengeluaranY1;
+                labaData.push(labaY1);
+                kasData.push(kasEndM12);
 
-                for (let i = 16; i <= 24; i++) {
-                    labels.push(`M${i}`);
-                    lastPemasukan += 1500000; // Extrapolate based on prior trend
-                    const currentLaba = lastPemasukan - stableOpex;
-                    lastKas += currentLaba;
-                    
-                    labaData.push(currentLaba);
-                    kasData.push(lastKas);
-                    pemasukanY2Total += lastPemasukan;
+                // --- Tahun 2 ---
+                let pemasukanY2 = initialPemasukan.slice(12).reduce((a, b) => a + b, 0);
+                let pengeluaranY2 = 15000000; // 3x 5jt
+                let lastPemasukanBulanan = initialPemasukan[14];
+                for (let i = 0; i < 9; i++) {
+                    lastPemasukanBulanan += 1500000;
+                    pemasukanY2 += lastPemasukanBulanan;
+                    pengeluaranY2 += 5000000;
                 }
-                
-                // --- Phase 3: Project Years 3-5 ---
-                let pemasukanTahunan = pemasukanY2Total;
-                let opexTahunan = stableOpex * 12;
-                let kasTahunan = lastKas;
+                const labaY2 = pemasukanY2 - pengeluaranY2;
+                const kasY2 = kasEndM12 + labaY2;
+                labaData.push(labaY2);
+                kasData.push(kasY2);
+
+                // --- Tahun 3, 4, 5 ---
+                let pemasukanTahunan = pemasukanY2;
+                let opexTahunan = pengeluaranY2;
+                let kasTahunan = kasY2;
 
                 for (let i = 3; i <= 5; i++) {
-                    labels.push(`Thn-${i}`);
                     pemasukanTahunan *= (1 + incomeGrowth);
                     opexTahunan *= (1 + opexGrowth);
                     const labaTahunan = pemasukanTahunan - opexTahunan;
@@ -227,20 +224,18 @@
             function updateProjectionUI(scenario) {
                 const { labels, kasData, labaData, tableData } = calculateProjection(scenario);
                 
-                // Update Table
                 projectionTableBody.innerHTML = `
                     <tr><td>Pemasukan Tahunan</td>${tableData.pemasukan.map(v => `<td>${formatCurrency(v)}</td>`).join('')}</tr>
                     <tr><td>Opex Tahunan</td>${tableData.opex.map(v => `<td>${formatCurrency(v)}</td>`).join('')}</tr>
                     <tr><td><strong>Laba Operasional</strong></td>${tableData.laba.map(v => `<td><strong>${formatCurrency(v)}</strong></td>`).join('')}</tr>
-                    <tr><td><strong>Saldo Kas Akhir</strong></td>${tableData.kas.map(v => `<td><strong>${formatCurrency(v)}</strong></td>`).join('')}</tr>
+                    <tr><td><strong>Saldo Kas Akhir Tahun</strong></td>${tableData.kas.map(v => `<td><strong>${formatCurrency(v)}</strong></td>`).join('')}</tr>
                 `;
 
-                // Update Chart
                 const chartData = {
                     labels: labels,
                     datasets: [
-                        { label: 'Laba Operasional', data: labaData, borderColor: 'rgba(40, 167, 69, 0.8)', backgroundColor: 'rgba(40, 167, 69, 0.1)', yAxisID: 'y', tension: 0.1, fill: true },
-                        { label: 'Akumulasi Saldo Kas', data: kasData, borderColor: 'rgba(23, 162, 184, 1)', backgroundColor: 'rgba(23, 162, 184, 0.1)', yAxisID: 'y1', tension: 0.1 }
+                        { type: 'bar', label: 'Laba Operasional Tahunan', data: labaData, backgroundColor: 'rgba(40, 167, 69, 0.7)', yAxisID: 'y' },
+                        { type: 'line', label: 'Akumulasi Saldo Kas', data: kasData, borderColor: 'rgba(23, 162, 184, 1)', backgroundColor: 'rgba(23, 162, 184, 0.1)', yAxisID: 'y1', tension: 0.1, fill: false }
                     ]
                 };
 
@@ -249,7 +244,7 @@
                     projectionChart.update();
                 } else {
                     projectionChart = new Chart(projectionCtx, {
-                        type: 'line', data: chartData,
+                        data: chartData,
                         options: {
                             responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
                             plugins: {
@@ -265,10 +260,7 @@
                     });
                 }
             }
-
             scenarioSelect.addEventListener('change', (e) => updateProjectionUI(e.target.value));
-            
-            // Initial call to render the default scenario
             updateProjectionUI('konservatif');
         });
     </script>
